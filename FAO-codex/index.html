@@ -18,9 +18,8 @@
 		
 		<!-- more css -->
 		<link rel="stylesheet" href="../style/select2.css" />
-		
+		<link rel="stylesheet" href="../style/layerslider.css" />
 		<link rel="stylesheet" href="../style/style-fao-codex-index.css" />
-        <link rel="stylesheet" href="../style/skin.css" />
 		<!--[if !IE 7]>
 			<style type="text/css">
 				#wrap {display:table;height:100%}
@@ -36,11 +35,36 @@
 			<div id="main">
 				<header>
                     <div class="clearfix">
-                        <a href="#" class="logo">AK-Finder</a>
+                        <a href="#" class="logo fNiv">AK-Finder</a>
                     </div>
                     
 				</header>
 
+                <section id="slideshow-wrapper">
+                    
+                    <div class="inner">
+                        
+                        <div id="layerslider" >
+                            
+                            <div class="ls-layer">
+                                <img class="ls-bg" src="../images/slideshow/Codex_banner1.jpg" onclick="imageClick('http://www.fao.org/food/food-safety-quality/capacity-development/participation-codex/codex-course/en/" alt="layer">
+                                    </div>
+                            
+                            <div class="ls-layer">
+                                <img class="ls-bg" src="../images/slideshow/Codex_banner2.jpg" onclick="imageClick('http://www.codexalimentarius.org/about-codex/en/')" alt="layer">
+                                    </div>
+                            
+                            <div class="ls-layer">
+                                <img class="ls-bg" src="../images/slideshow/Codex_banner3.jpg" onclick="imageClick('http://greenideasproject.org/')" alt="layer">
+                                    </div>
+                            
+                        </div>
+                        
+                    </div>
+                    
+                </section>
+                
+                
 				<div class="main_body frontpage">
 					<div class="inner">
 						<section class="search aligncenter">
@@ -161,13 +185,92 @@
 		<script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
 		<!-- include Select2 plugin -->
 		<script src="../js/select2.js"></script>
+        
+        <!---->
+		<script src="http://cdn.jquerytools.org/1.2.7/all/jquery.tools.min.js"></script>
+		<!-- include Placeholder plugin -->
+		<script src="../js/jquery.placeholder.min.js"></script>
+		<!-- include JMenu plugin -->
+		<script src="../js/jMenu.jquery.min.js"></script>
+		<!-- include Paralax plugin -->
+		<script src="../js/layerslider.kreaturamedia.jquery.js" type="text/javascript"></script>
+		<!-- include Cycle plugin -->
+		<script src="../js/jquery.cycle.all.js" type="text/javascript"></script>
+		<!-- include Screw Default Buttons plugin -->
+		<script src="../js/jquery.screwdefaultbuttonsV2.min.js" type="text/javascript"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function () {
+                              function format(state) {
+                              if (!state.id) return state.text; // optgroup
+                              return "<img class='flag' alt='flag' src='style/images/flag_" + state.id.toLowerCase() + ".jpg'/>" + state.text;
+                              }
+                              $("#lang-selector").select2({
+                                                          minimumResultsForSearch:100,
+                                                          formatResult: format,
+                                                          formatSelection: format
+                                                          })
+                              $(".withplaceholder").placeholder();
+                              $("#ext_search").click(function (event) {
+                                                     event.preventDefault()
+                                                     $("div.moduletable_extendedsearch").slideToggle("slow");
+                                                     });
+                              $('input:radio').screwDefaultButtons({
+                                                                   image: 'url("style/images/radio.png")',
+                                                                   width: 12,
+                                                                   height: 14
+                                                                   });
+                              
+                              $(".selectline select").select2({
+                                                              minimumResultsForSearch:100,
+                                                              dropdownCssClass:"simple"
+                                                              })
+                              
+                              $("#jMenu").jMenu();
+                              
+                              $('#layerslider').layerSlider({
+                                                            navPrevNext : false,
+                                                            navStartStop : false,
+                                                            skin : 'lightskin',
+                                                            skinsPath : '../style/skins/'
+                                                            });
+                              
+                              $('.is_slider').each(function() {
+                                                   var $navWrap = $('<div class="slider-navigation clearfix"></div>');
+                                                   var $navPrev = $('<a href="#" class="slider-prev">Prev</a>');
+                                                   $navWrap.append($navPrev);
+                                                   var $navPager = $('<div class="pager"></div>');
+                                                   $navWrap.append($navPager); 
+                                                   var $navNext = $('<a href="#" class="slider-next">Next</a>');
+                                                   $navWrap.append($navNext);
+                                                   $navWrap.insertBefore(this);
+                                                   $(this).cycle({
+                                                                 fx:'scrollLeft',
+                                                                 timeout:0,
+                                                                 prev:$navPrev,
+                                                                 next:$navNext,
+                                                                 pager:$navPager
+                                                                 });
+                                                   
+                                                   });
+                              
+                              $(".scrollable").scrollable();
+                              
+                              });
+            </script>
+        
+        <script type="text/javascript">
+            function imageClick(url) {window.location = url;}
+            </script>
+        
+        <!---->
 		
 		
 		<script type="text/javascript">
 			$(document).ready(function () {
 				function format(state) {
 					if (!state.id) return state.text; // optgroup
-					return "<img class='flag' alt='flag' src='style/images/flag_" + state.id.toLowerCase() + ".jpg'/>" + state.text;
+					return "<img class='flag' alt='flag' src='../style/images/flag_" + state.id.toLowerCase() + ".jpg'/>" + state.text;
 				}
 				$("#font-selector").select2({
 					minimumResultsForSearch:100
