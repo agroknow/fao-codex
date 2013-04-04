@@ -206,11 +206,17 @@ function initializeFinder(){
 	if (!FINDER_INITIALIZED) {
 		if(typeof customizeFinder == 'function') {
 			var customParams = customizeFinder();
+            var urlSelectedProviders = getUrlVars()["providers"];
 			if(customParams) {
                 /*limit collection|providers*/
-                if (customParams.selectedProviders) SELECTED_PROVIDERS = customParams.selectedProviders;
+                if(urlSelectedProviders){
+                    SELECTED_PROVIDERS = urlSelectedProviders;
+                    alert(urlSelectedProviders);
+                }
+                if (!urlSelectedProviders && customParams.selectedProviders) SELECTED_PROVIDERS = customParams.selectedProviders;
                 //alert(SELECTED_PROVIDERS);
                 /*---*/
+                
 				if (customParams.serviceUrl) SERVICE_URL = customParams.serviceUrl;
 				if (customParams.repositoryName) REPOSITORY_NAME = customParams.repositoryName;
 				if (customParams.facets) FACET_TOKENS = customParams.facets;
@@ -460,6 +466,8 @@ function parseQueryString(initUpdate){
         var lrt = getUrlVars()["lrt"];
         var key = getUrlVars()["keyword"];
         var context = getUrlVars()["context"];
+        var urlSelectedProviders = getUrlVars()["providers"];
+        
         if (lrt) {
             clauses.push({language:'anyOf',expression:'lrt:'+ lrt});
         }
@@ -469,12 +477,14 @@ function parseQueryString(initUpdate){
         if (context) {
             clauses.push({language:'anyOf',expression:'context:' + context});
         }
+        if (urlSelectedProviders){
+            clauses.push({language:'anyOf',expression:'provider:'+urlSelectedProviders});
+        }
+        
+        if (!urlSelectedProviders && selectedProviders) clauses.push({language:'anyOf',expression:'provider:'+selectedProviders});
         //clauses.push({language:'anyOf',expression:'keyword:' + key});
         //clauses.push({language:'anyOf',expression:'lrt:image'});
         // add the below to code @ github. It is to limit the results only for OE collection //
-        
-        //### selectedProviders in case we want to limit the sources to specific target.
-        if(selectedProviders) clauses.push({language:'anyOf',expression:'provider:'+selectedProviders});
         
     }
     if(spq.length > 1){
