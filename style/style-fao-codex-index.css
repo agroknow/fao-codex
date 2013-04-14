@@ -878,12 +878,13 @@ section.search input[type=text] {
 /* MODLIST */
 .modlist > h3 {
     color:#9aad40;
-	margin-bottom:45px;
+    margin:auto;
+	margin-bottom:40px;
     border-bottom:solid 2px #9aad40;
     padding-bottom:5px;
     margin-top:130px;
     width:700px;
-    margin:auto;
+    
 }
 .modlist article {
 	float:left;
