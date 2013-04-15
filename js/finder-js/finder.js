@@ -217,7 +217,7 @@ function initializeFinder(){
                 /*limit collection|providers*/
                 if(urlSelectedProviders){
                     SELECTED_PROVIDERS = urlSelectedProviders;
-                    alert(urlSelectedProviders);
+                    /*alert(urlSelectedProviders);*/
                 }
                 if (!urlSelectedProviders && customParams.selectedProviders) SELECTED_PROVIDERS = customParams.selectedProviders;
                 //alert(SELECTED_PROVIDERS);
