@@ -137,6 +137,11 @@ langName['bho']='Bhojpuri';
 langName['tel']='Telugu';
 langName['gaz']='Oromifa';
 langName['twi']='Twi';
+
+langName['ar'] = 'Arabic';
+langName['ru'] = 'Russian';
+langName['zh'] = 'Chinese';
+langName['es'] = 'Spanish';
 /*--end language mapping*/
 
 
@@ -178,6 +183,7 @@ providerName['oemiksike']='MIKSIKE';
 providerName['aglrfaocdx']='FAO Codex';
 providerName['aglrfskn']='Food Safety Knowledge Network';
 providerName['aglrfoodsafety']='Food Safety OER';
+providerName['aglrfaorighttofood']='FAO Right to Food';
 
 /*--end providers mapping*/
 
@@ -1015,6 +1021,10 @@ new Ajax.JSONRequest(SERVICE_URL, {
                var label = data.val;
                if(providerName[data.val])
                {label = providerName[data.val];}
+               
+               //$ Bakalides tou kosmou
+               if(label=='teacher'){label="instructor";}
+               //--
                
                a({href:'#', id: data.field + ':' + data.val, title: data.val, onclick:"toggleFacetValue('#{id}','#{parent}')".interpolate({id: data.field + ':' + data.val,parent: data.field})}, span(label), span({cls:'total'}, data.count));
                
