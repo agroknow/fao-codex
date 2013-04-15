@@ -75,6 +75,7 @@ body:before {
 	height:110px;
 	padding-top:5px;
 	background-color:#f3f3f3;
+
 }
 .supporters a {
 	font-size:10px;
@@ -387,13 +388,43 @@ footer#mainfooter {
 .sorting {
 	height:40px;
 	line-height:40px;
-	-webkit-border-radius:4px 4px 4px 0;
-	-moz-border-radius:4px 4px 4px 0;
-	border-radius:4px 4px 4px 0;
-	background-color:#daeb9b;
-	color:#c26031;
 	padding:0 9px 0 21px;
+    color:white;
+    
+    background-image: linear-gradient(right bottom, rgb(242,155,68) 37%, rgb(234,90,46) 67%);
+    background-image: -o-linear-gradient(right bottom, rgb(242,155,68) 37%, rgb(234,90,46) 67%);
+    background-image: -moz-linear-gradient(right bottom, rgb(242,155,68) 37%, rgb(234,90,46) 67%);
+    background-image: -webkit-linear-gradient(right bottom, rgb(242,155,68) 37%, rgb(234,90,46) 67%);
+    background-image: -ms-linear-gradient(right bottom, rgb(242,155,68) 37%, rgb(234,90,46) 67%);
+    
+    background-image: -webkit-gradient(
+	linear,
+	right bottom,
+	left top,
+	color-stop(0.37, rgb(242,155,68)),
+	color-stop(0.67, rgb(234,90,46))
+    );
+    
 }
+
+.sorting a
+{
+    color:white;
+}
+
+.sorting a:hover
+{
+    color:yellow;
+    text-decoration:underline;
+}
+
+.here
+{
+    text-decoration:underline;
+    font-size:14px;
+}
+
+
 .sorting label {
 	float:right;
 	margin-left:20px;
