@@ -386,7 +386,7 @@ footer#mainfooter {
 }
 
 .sorting {
-	height:40px;
+	height:30px;
 	line-height:40px;
 	padding:0 9px 0 21px;
     color:white;
@@ -416,6 +416,10 @@ footer#mainfooter {
 {
     color:yellow;
     text-decoration:underline;
+}
+
+.navigation-left-padding{
+    padding-left:250px;
 }
 
 .here
