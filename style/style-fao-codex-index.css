@@ -1,4 +1,4 @@
-body { font-family:Tahoma, sans-serif; font-size: 14px; color: #757575;   
+body { font-family:'Signika', Tahoma, sans-serif; font-size: 14px; color: #757575;   
   background-repeat: repeat-x;
   background-attachment: scroll;
   background-position: top left;}
@@ -388,7 +388,7 @@ footer#mainfooter {
 .sorting {
 	height:30px;
 	line-height:40px;
-	padding:0 9px 0 21px;
+	padding:0 9px 10px 21px;
     color:white;
     
     background-image: linear-gradient(right bottom, rgb(242,155,68) 37%, rgb(234,90,46) 67%);

@@ -561,7 +561,7 @@ nav #jMenu li ul li a:hover {
 .sorting {
 	height:30px;
 	line-height:40px;
-	padding:0 9px 0 21px;
+	padding:0 9px 10px 21px;
     color:white;
     
     background-image: linear-gradient(right bottom, rgb(242,155,68) 37%, rgb(234,90,46) 67%);
@@ -579,10 +579,15 @@ nav #jMenu li ul li a:hover {
     );
     
 }
+
+.slim{
+    height:10px;
+}
 /*navigation purposes*/
 .sorting a
 {
     color:white;
+    
 }
 
 .navigation-left-padding{
