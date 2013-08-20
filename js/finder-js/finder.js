@@ -475,12 +475,15 @@ function parseQueryString(initUpdate){
         var urlSelectedProviders = getUrlVars()["providers"];
         
         if (lrt) {
+        	lrt = lrt.replace("#","").replace("%20", " ");
             clauses.push({language:'anyOf',expression:'lrt:'+ lrt});
         }
         if (key) {
+        	key = key.replace("#","").replace("%20", " ");
             clauses.push({language:'anyOf',expression:'keyword:' + key});
         }
         if (context) {
+        	context = context.replace("#","").replace("%20", " ");
             clauses.push({language:'anyOf',expression:'context:' + context});
         }
         if (urlSelectedProviders){
