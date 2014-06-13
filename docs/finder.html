@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>finder.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>finder.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h2 id="finder-configuration-file">Finder configuration file</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Copyright ARIADNE Foundation</p>
+<p>The Finder can be customised by providing a javascript function ‘customizeFinder()’
+that returns an object with parameters. See example below.
+The parameters that can be specifies are:</p>
+<p>externalSources: an Array. Default is [“eur”,”wp”,”scr”,”ss”,”gb”]
+        eur: Europeana
+        wp: Wikipedia
+        scr: Scribd
+        ss: Slideshare
+        gb: Google Books
+        They are rendered in the order given
+facets: an Array. Default is [“provider”,”language”,”format”,”context”,”lrt”]
+        ‘lrt’ means Learning resource typef
+        They are rendered in the order given
+facetIncludes: an Object with facets as possible members.
+        For example {“language”:[“en”,”fr”,”nl”,”de”],”provider”:[“ARIADNE”,”OERcommons”]}
+limitFacetDisplay:an Object with facets as possible members.
+        For example {“language”:[“en”,”fr”,”nl”,”de”]},
+maxLengthDescription:  Default is 650
+pageContainers: an Array. Default is [“bottom”]. Available options are [“bottom”,”top”]
+pageSize: Default is 10
+repositoryName: Default is “ARIADNE”
+serviceUrl: the URL of the repository services. Default is “<a href="http://ariadne.cs.kuleuven.be/GlobeFinderF1/servlet/search">http://ariadne.cs.kuleuven.be/GlobeFinderF1/servlet/search</a>“
+selectedProviders: in case we want to limit the collections we add here the selected providers. If none is listed all collections will be imported
+     For example “selectedProviders”:[“aglraims”,”digitalgreen”,”traglor”]</p>
+<p>function customizeFinder() {
+return {
+    “repositoryName”: “AgLR”,
+    “pageContainers”:[“top”,”bottom”],
+    “facets”:[“provider”,”lrt”,”language”,”context”]
+}}</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>All global variables are now capitalised.
+All local variables should be declared with a ‘var’ in the respective function, and should not be capitalised.
+In order to target your repository you need to change values REPOSITORY_NAME and SERVICE_URL
+and also the same values inside the listing.html at customizeFinder() function !</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>limit collections | providers</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> SELECTED_PROVIDERS = [];
+<span class="hljs-keyword">var</span> SERVICE_URL = <span class="hljs-string">'http://ariadne.cs.kuleuven.be/GlobeFinderF1/servlet/search'</span>;
+<span class="hljs-keyword">var</span> EXT_SOURCE_URL = <span class="hljs-string">'http://ariadne.cs.kuleuven.be/GlobeFinderF1/servlet/search'</span>;
+<span class="hljs-keyword">var</span> SERVICE_URL = <span class="hljs-string">'http://ariadne.cs.kuleuven.be/globe-ws/api/ariadne/restp'</span>;
+<span class="hljs-keyword">var</span> ROOT_URL = <span class="hljs-string">'http://ariadne.cs.kuleuven.be/finder/'</span>;
+<span class="hljs-keyword">var</span> START_DESCRIPTION = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">var</span> END_DESCRIPTION = <span class="hljs-number">650</span>;
+<span class="hljs-keyword">var</span> REPOSITORY_NAME = <span class="hljs-string">"ARIADNE"</span>;
+<span class="hljs-keyword">var</span> THOUSAND_SEP = <span class="hljs-string">','</span>;
+<span class="hljs-keyword">var</span> FACET_TOKENS = [<span class="hljs-string">'provider'</span>, <span class="hljs-string">'language'</span>, <span class="hljs-string">'format'</span>, <span class="hljs-string">'context'</span>, <span class="hljs-string">'lrt'</span>, <span class="hljs-string">'tagr'</span>];
+<span class="hljs-keyword">var</span> FACET_INCLUDES = [];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>FACETS MAPPING</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> FACET_LABELS = {};
+FACET_LABELS[<span class="hljs-string">'provider'</span>] = <span class="hljs-string">'Collection'</span>;
+FACET_LABELS[<span class="hljs-string">'language'</span>] = <span class="hljs-string">'Language'</span>;
+FACET_LABELS[<span class="hljs-string">'format'</span>] = <span class="hljs-string">'Format'</span>;
+FACET_LABELS[<span class="hljs-string">'keyword'</span>] = <span class="hljs-string">'Keyword'</span>;
+FACET_LABELS[<span class="hljs-string">'context'</span>] = <span class="hljs-string">'Educational Context'</span>;
+FACET_LABELS[<span class="hljs-string">'lrt'</span>] = <span class="hljs-string">'Resource Type'</span>;
+FACET_LABELS[<span class="hljs-string">'rights'</span>] = <span class="hljs-string">'Rights'</span>;
+FACET_LABELS[<span class="hljs-string">'tagr'</span>] = <span class="hljs-string">'Typical Age Range'</span>;
+FACET_LABELS[<span class="hljs-string">'iur'</span>] = <span class="hljs-string">'Intended Audience'</span>;
+FACET_LABELS[<span class="hljs-string">'il'</span>] = <span class="hljs-string">'Interactivity type level'</span>;
+FACET_LABELS[<span class="hljs-string">'lom.classification.taxonpath.taxon.entry.string'</span>] = <span class="hljs-string">'Classification'</span>;
+FACET_LABELS[<span class="hljs-string">'contribute'</span>] = <span class="hljs-string">'Contributor'</span>; <span class="hljs-comment">/* added in order to check the field*/</span>
+<span class="hljs-comment">/*--end mapping*/</span>
+<span class="hljs-keyword">var</span> LIMIT_FACET_DISPLAY = {};
+<span class="hljs-keyword">var</span> PAGE_CONTAINERS = [];
+<span class="hljs-keyword">var</span> EXT_SOURCES = [<span class="hljs-string">'eur'</span>, <span class="hljs-string">'wp'</span>, <span class="hljs-string">'scr'</span>, <span class="hljs-string">'ss'</span>, <span class="hljs-string">'gb'</span>];
+<span class="hljs-keyword">var</span> AVAILABLE_ES = {};
+AVAILABLE_ES[<span class="hljs-string">'eur'</span>] = {
+	<span class="hljs-string">"engine"</span>: <span class="hljs-string">"Europeana"</span>,
+	<span class="hljs-string">"name"</span>: <span class="hljs-string">"Europeana"</span>
+};
+AVAILABLE_ES[<span class="hljs-string">'wp'</span>] = {
+	<span class="hljs-string">"engine"</span>: <span class="hljs-string">"Wikipedia"</span>,
+	<span class="hljs-string">"name"</span>: <span class="hljs-string">"Wikipedia"</span>
+};
+AVAILABLE_ES[<span class="hljs-string">'scr'</span>] = {
+	<span class="hljs-string">"engine"</span>: <span class="hljs-string">"Scribd"</span>,
+	<span class="hljs-string">"name"</span>: <span class="hljs-string">"Scribd"</span>
+};
+AVAILABLE_ES[<span class="hljs-string">'ss'</span>] = {
+	<span class="hljs-string">"engine"</span>: <span class="hljs-string">"SlideShare"</span>,
+	<span class="hljs-string">"name"</span>: <span class="hljs-string">"Slide Share"</span>
+};
+AVAILABLE_ES[<span class="hljs-string">'gb'</span>] = {
+	<span class="hljs-string">"engine"</span>: <span class="hljs-string">"GoogleBooks"</span>,
+	<span class="hljs-string">"name"</span>: <span class="hljs-string">"Google Books"</span>
+};
+<span class="hljs-keyword">var</span> PAGE;
+<span class="hljs-keyword">var</span> PAGE_SIZE = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">var</span> NR_RESULTS = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">var</span> FINDER_INITIALIZED = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">var</span> CHECK = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">var</span> langName = {};
+<span class="hljs-keyword">var</span> iter = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>LANGUAGE MAPPING</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>langName[<span class="hljs-string">'n/a'</span>] = <span class="hljs-string">'Other'</span>;
+langName[<span class="hljs-string">'en'</span>] = <span class="hljs-string">'English'</span>;
+langName[<span class="hljs-string">'eng;'</span>] = <span class="hljs-string">'English'</span>;
+langName[<span class="hljs-string">'eng'</span>] = <span class="hljs-string">'English'</span>;
+langName[<span class="hljs-string">'eng; eng'</span>] = <span class="hljs-string">'English'</span>;
+langName[<span class="hljs-string">'fr'</span>] = <span class="hljs-string">'French'</span>;
+langName[<span class="hljs-string">'fre'</span>] = <span class="hljs-string">'French'</span>;
+langName[<span class="hljs-string">'el'</span>] = <span class="hljs-string">'Greek'</span>;
+langName[<span class="hljs-string">'hun'</span>] = <span class="hljs-string">'Hungarian'</span>;
+langName[<span class="hljs-string">'hu'</span>] = <span class="hljs-string">'Hungarian'</span>;
+langName[<span class="hljs-string">'et'</span>] = <span class="hljs-string">'Estonian'</span>;
+langName[<span class="hljs-string">'est'</span>] = <span class="hljs-string">'Estonian'</span>;
+langName[<span class="hljs-string">'nl'</span>] = <span class="hljs-string">'Dutch'</span>;
+langName[<span class="hljs-string">'ro'</span>] = <span class="hljs-string">'Romanian'</span>;
+langName[<span class="hljs-string">'de'</span>] = <span class="hljs-string">'German'</span>;
+langName[<span class="hljs-string">'deu'</span>] = <span class="hljs-string">'German'</span>;
+langName[<span class="hljs-string">'tr'</span>] = <span class="hljs-string">'Turkish'</span>;
+langName[<span class="hljs-string">'pt'</span>] = <span class="hljs-string">'Portuguese'</span>;
+langName[<span class="hljs-string">'por'</span>] = <span class="hljs-string">'Portuguese'</span>;
+langName[<span class="hljs-string">'es'</span>] = <span class="hljs-string">'Spanish'</span>;
+langName[<span class="hljs-string">'sv'</span>] = <span class="hljs-string">'Swedish'</span>;
+langName[<span class="hljs-string">'ell'</span>] = <span class="hljs-string">'Greek'</span>;
+langName[<span class="hljs-string">'lat'</span>] = <span class="hljs-string">'Latin'</span>;
+langName[<span class="hljs-string">'rus'</span>] = <span class="hljs-string">'Russian'</span>;
+langName[<span class="hljs-string">'ori'</span>] = <span class="hljs-string">'Oriya'</span>;
+langName[<span class="hljs-string">'hin'</span>] = <span class="hljs-string">'Hindi'</span>;
+langName[<span class="hljs-string">'sat'</span>] = <span class="hljs-string">'Santhali'</span>;
+langName[<span class="hljs-string">'unr'</span>] = <span class="hljs-string">'Mundari'</span>;
+langName[<span class="hljs-string">'sck'</span>] = <span class="hljs-string">'Sadri'</span>;
+langName[<span class="hljs-string">'hok'</span>] = <span class="hljs-string">'Ho'</span>;
+langName[<span class="hljs-string">'ben'</span>] = <span class="hljs-string">'Bengali'</span>;
+langName[<span class="hljs-string">'kan'</span>] = <span class="hljs-string">'Kannada'</span>;
+langName[<span class="hljs-string">'noe'</span>] = <span class="hljs-string">'Neemadi'</span>;
+langName[<span class="hljs-string">'sat'</span>] = <span class="hljs-string">'Santhali'</span>;
+langName[<span class="hljs-string">'gon'</span>] = <span class="hljs-string">'Gondi'</span>;
+langName[<span class="hljs-string">'bns'</span>] = <span class="hljs-string">'Narsinghpuria'</span>;
+langName[<span class="hljs-string">'bhb'</span>] = <span class="hljs-string">'Bhili'</span>;
+langName[<span class="hljs-string">'mup'</span>] = <span class="hljs-string">'Malvi'</span>;
+langName[<span class="hljs-string">'mai'</span>] = <span class="hljs-string">'Maithili'</span>;
+langName[<span class="hljs-string">'bho'</span>] = <span class="hljs-string">'Bhojpuri'</span>;
+langName[<span class="hljs-string">'tel'</span>] = <span class="hljs-string">'Telugu'</span>;
+langName[<span class="hljs-string">'gaz'</span>] = <span class="hljs-string">'Oromifa'</span>;
+langName[<span class="hljs-string">'twi'</span>] = <span class="hljs-string">'Twi'</span>;
+langName[<span class="hljs-string">'ar'</span>] = <span class="hljs-string">'Arabic'</span>;
+langName[<span class="hljs-string">'ru'</span>] = <span class="hljs-string">'Russian'</span>;
+langName[<span class="hljs-string">'zh'</span>] = <span class="hljs-string">'Chinese'</span>;
+langName[<span class="hljs-string">'es'</span>] = <span class="hljs-string">'Spanish'</span>;
+<span class="hljs-comment">/*--end language mapping*/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>PROVIDERS MAPPING</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> providerName = {};
+providerName[<span class="hljs-string">'greenoer'</span>] = <span class="hljs-string">'Green OER'</span>;
+providerName[<span class="hljs-string">'digitalgreen'</span>] = <span class="hljs-string">'Digital Green'</span>;
+providerName[<span class="hljs-string">'oerafrica'</span>] = <span class="hljs-string">'OER Africa'</span>;
+providerName[<span class="hljs-string">'sercmicro'</span>] = <span class="hljs-string">'SERCMICRO'</span>;
+providerName[<span class="hljs-string">'faocapacityportal'</span>] = <span class="hljs-string">'FAO capacity portal'</span>;
+providerName[<span class="hljs-string">'traglor'</span>] = <span class="hljs-string">'Traglor'</span>;
+providerName[<span class="hljs-string">'nsdlbeyond'</span>] = <span class="hljs-string">'NSDL Beyond'</span>;
+providerName[<span class="hljs-string">'edunhmc'</span>] = <span class="hljs-string">'Educational National Europe'</span>;
+providerName[<span class="hljs-string">'aglreol'</span>] = <span class="hljs-string">'Encyclopedia of Life'</span>;
+providerName[<span class="hljs-string">'aglrnb'</span>] = <span class="hljs-string">'Natural Bridge'</span>;
+providerName[<span class="hljs-string">'cgiar'</span>] = <span class="hljs-string">'CGIAR'</span>;
+providerName[<span class="hljs-string">'ruforum'</span>] = <span class="hljs-string">'RuForum'</span>;
+providerName[<span class="hljs-string">'gfar'</span>] = <span class="hljs-string">'Global Forum on Agricultural Research'</span>;
+providerName[<span class="hljs-string">'aglrgsg'</span>] = <span class="hljs-string">'Great School Gardens'</span>;
+providerName[<span class="hljs-string">'access'</span>] = <span class="hljs-string">'Access Agricultural'</span>;
+providerName[<span class="hljs-string">'aglrllb'</span>] = <span class="hljs-string">'Life Lab'</span>;
+providerName[<span class="hljs-string">'rurinc'</span>] = <span class="hljs-string">'Rural Inclusion'</span>;
+providerName[<span class="hljs-string">'aglraims'</span>] = <span class="hljs-string">'AIMS'</span>;
+providerName[<span class="hljs-string">'aglrslowfood'</span>] = <span class="hljs-string">'Slow Food'</span>;
+providerName[<span class="hljs-string">'oeagroasis'</span>] = <span class="hljs-string">'AGROASIS/NOVA'</span>;
+providerName[<span class="hljs-string">'oeenoat'</span>] = <span class="hljs-string">'ENOAT'</span>;
+providerName[<span class="hljs-string">'oebioagro'</span>] = <span class="hljs-string">'BioAgro'</span>;
+providerName[<span class="hljs-string">'oeecologiga'</span>] = <span class="hljs-string">'Ecologica'</span>;
+providerName[<span class="hljs-string">'oeintute'</span>] = <span class="hljs-string">'Intute'</span>;
+providerName[<span class="hljs-string">'oeaua'</span>] = <span class="hljs-string">'AUA'</span>;
+providerName[<span class="hljs-string">'oeeulsesthonian'</span>] = <span class="hljs-string">'EULS/Estonian'</span>;
+providerName[<span class="hljs-string">'oebmlfuwaustrian'</span>] = <span class="hljs-string">'BMLFUW/Austrian'</span>;
+providerName[<span class="hljs-string">'oefao'</span>] = <span class="hljs-string">'FAO'</span>;
+providerName[<span class="hljs-string">'oeellinogermaniki'</span>] = <span class="hljs-string">'Ellinogermaniki Agogi'</span>;
+providerName[<span class="hljs-string">'oeorganiceprints'</span>] = <span class="hljs-string">'Organic e-prints'</span>;
+providerName[<span class="hljs-string">'oespanish'</span>] = <span class="hljs-string">'Spanish'</span>;
+providerName[<span class="hljs-string">'oemiksike'</span>] = <span class="hljs-string">'MIKSIKE'</span>;
+providerName[<span class="hljs-string">'aglrfaocdx'</span>] = <span class="hljs-string">'FAO Codex'</span>;
+providerName[<span class="hljs-string">'aglrfskn'</span>] = <span class="hljs-string">'Food Safety Knowledge Network'</span>;
+providerName[<span class="hljs-string">'aglrfoodsafety'</span>] = <span class="hljs-string">'Food Safety OER'</span>;
+providerName[<span class="hljs-string">'aglrfaorighttofood'</span>] = <span class="hljs-string">'FAO Right to Food'</span>; <span class="hljs-comment">/*--end providers mapping*/</span>
+google.load(<span class="hljs-string">"language"</span>, <span class="hljs-string">"1"</span>);
+Event.observe(window, <span class="hljs-string">'load'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+	initialSearch();
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Initial Search function
+checks query parameters and calls the findMaterials() function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initialSearch</span><span class="hljs-params">()</span> {</span>
+	initializeFinder();
+	<span class="hljs-keyword">var</span> qs = location.search.substring(<span class="hljs-number">1</span>);
+	<span class="hljs-keyword">var</span> parms = qs.toQueryParams();
+	<span class="hljs-keyword">if</span> (parms.query != <span class="hljs-literal">undefined</span> &amp;&amp; parms.query != <span class="hljs-string">''</span>) {
+		$(<span class="hljs-string">'query'</span>).value = parms.query;
+	}
+	<span class="hljs-keyword">if</span> ($F(<span class="hljs-string">'query'</span>).blank()) {
+		resetFacets();
+		findMaterials(<span class="hljs-number">0</span>, PAGE_SIZE, <span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>);
+	} <span class="hljs-keyword">else</span> {
+		doSearch();
+	}
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>initializeFinder()</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initializeFinder</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">if</span> (!FINDER_INITIALIZED) {
+		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> customizeFinder == <span class="hljs-string">'function'</span>) {
+			<span class="hljs-keyword">var</span> customParams = customizeFinder();
+			<span class="hljs-keyword">var</span> urlSelectedProviders = getUrlVars()[<span class="hljs-string">"providers"</span>];
+			<span class="hljs-keyword">if</span> (customParams) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>limit collection | providers</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (urlSelectedProviders) {
+					SELECTED_PROVIDERS = urlSelectedProviders;
+				}
+				<span class="hljs-keyword">if</span> (!urlSelectedProviders &amp;&amp; customParams.selectedProviders) SELECTED_PROVIDERS = customParams.selectedProviders;
+				<span class="hljs-keyword">if</span> (customParams.serviceUrl) SERVICE_URL = customParams.serviceUrl;
+				<span class="hljs-keyword">if</span> (customParams.repositoryName) REPOSITORY_NAME = customParams.repositoryName;
+				<span class="hljs-keyword">if</span> (customParams.facets) FACET_TOKENS = customParams.facets;
+				<span class="hljs-keyword">if</span> (customParams.facetIncludes) {
+					<span class="hljs-keyword">var</span> ff = [];
+					<span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> customParams.facetIncludes) {
+						ff.push(key + <span class="hljs-string">":"</span> + customParams.facetIncludes[key]);
+					};
+					FACET_INCLUDES = ff;
+				}
+				<span class="hljs-keyword">if</span> (customParams.limitFacetDisplay) LIMIT_FACET_DISPLAY = customParams.limitFacetDisplay;
+				<span class="hljs-keyword">if</span> (customParams.maxLengthDescription) END_DESCRIPTION = customParams.maxLengthDescription;
+				<span class="hljs-keyword">if</span> (customParams.pageSize) PAGE_SIZE = customParams.pageSize;
+				<span class="hljs-keyword">if</span> (customParams.pageContainers) {
+					PAGE_CONTAINERS = [];
+					<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; customParams.pageContainers.length; i++) {
+						PAGE_CONTAINERS.push(<span class="hljs-string">'pagination_'</span> + customParams.pageContainers[i]);
+					}
+				}
+				<span class="hljs-keyword">if</span> (customParams.externalSources) EXT_SOURCES = customParams.externalSources;
+			}
+		}
+		<span class="hljs-keyword">if</span> (PAGE_CONTAINERS.indexOf(<span class="hljs-string">'pagination_top'</span>) &gt;= <span class="hljs-number">0</span>) {
+			<span class="hljs-keyword">if</span> (!$(<span class="hljs-string">'insert_pagination_top'</span>)) {
+				$(<span class="hljs-string">'body'</span>).insert(<span class="hljs-string">'&lt;div id="insert_pagination_top" style="display:none"&gt;&lt;/div&gt;'</span>);
+			}
+			$(<span class="hljs-string">'insert_pagination_top'</span>).update(<span class="hljs-string">'&lt;DIV id="pagination_top"&gt;&lt;/DIV&gt;'</span>);
+		}
+		<span class="hljs-keyword">if</span> (PAGE_CONTAINERS.indexOf(<span class="hljs-string">'pagination_bottom'</span>) &gt;= <span class="hljs-number">0</span>) {
+			<span class="hljs-keyword">if</span> (!$(<span class="hljs-string">'insert_pagination_bottom'</span>)) {
+				$(<span class="hljs-string">'body'</span>).insert(<span class="hljs-string">'&lt;div id="insert_pagination_bottom" style="display:none"&gt;&lt;/div&gt;'</span>);
+			}
+			$(<span class="hljs-string">'insert_pagination_bottom'</span>).update(<span class="hljs-string">'&lt;div id="pagination_bottom"&gt;&lt;/div&gt;'</span>);
+		}
+		<span class="hljs-keyword">if</span> (!$(<span class="hljs-string">'insert_summary'</span>)) {
+			$(<span class="hljs-string">'body'</span>).insert(<span class="hljs-string">'&lt;div id="insert_summary" style="display:none"&gt;&lt;/div&gt;'</span>);
+		}
+		$(<span class="hljs-string">'insert_summary'</span>).update(<span class="hljs-string">'&lt;div id="summary"&gt;&lt;div id="search_title" &gt;&lt;span id="search_terms"&gt;&lt;/span&gt; &lt;strong&gt;&lt;span id="search_results_index"&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;'</span>);
+		<span class="hljs-keyword">if</span> (!$(<span class="hljs-string">'insert_facets'</span>)) {
+			$(<span class="hljs-string">'body'</span>).insert(<span class="hljs-string">'&lt;div id="insert_facets" style="display:none"&gt;&lt;/div&gt;'</span>);
+		}
+		<span class="hljs-keyword">var</span> div = [];
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; FACET_TOKENS.length; i++) {
+			<span class="hljs-keyword">var</span> fn = FACET_TOKENS[i];
+			div.push(<span class="hljs-string">'&lt;a href="#" id="'</span> + fn + <span class="hljs-string">'" onclick="return false;" class="filter_parent opened"&gt;&lt;span&gt;'</span> + FACET_LABELS[fn] + <span class="hljs-string">'&lt;/span&gt;&lt;/a&gt;&lt;div id="'</span> + fn + <span class="hljs-string">'_rbo" class="filter_child" style="display: block; overflow: hidden;height:auto;"&gt;&lt;/div&gt;'</span>);
+		}
+		div.push(<span class="hljs-string">'&lt;/DIV&gt;'</span>);
+		$(<span class="hljs-string">'insert_facets'</span>).update(div.join(<span class="hljs-string">''</span>));
+		<span class="hljs-keyword">if</span> (!$(<span class="hljs-string">'insert_results'</span>)) {
+			$(<span class="hljs-string">'body'</span>).insert(<span class="hljs-string">'&lt;div id="insert_results" style="display:none"&gt;&lt;/div&gt;'</span>);
+		}
+		<span class="hljs-keyword">var</span> div = [];
+		<span class="hljs-keyword">var</span> msg = <span class="hljs-string">'Search the #{repName} Repository'</span>.interpolate({
+			repName: REPOSITORY_NAME
+		});
+		div.push(<span class="hljs-string">'&lt;DIV id="results"&gt;'</span>);
+		div.push(<span class="hljs-string">'&lt;div id="searchMessage"&gt;&lt;h3 align="center"&gt;'</span> + msg + <span class="hljs-string">'&lt;/h3&gt;&lt;/div&gt;'</span>);
+		div.push(<span class="hljs-string">'&lt;div id="noResults" style="display:none"&gt;&lt;h3 align="center"&gt;No Results Found&lt;/h3&gt;&lt;/div&gt;'</span>);
+		div.push(<span class="hljs-string">'&lt;div id="search_results"&gt;&lt;/div&gt;'</span>);
+		div.push(<span class="hljs-string">'&lt;/div&gt;'</span>);
+		$(<span class="hljs-string">'insert_results'</span>).update(div.join(<span class="hljs-string">''</span>));
+
+		initializeJamlTemplates();
+		PAGE = <span class="hljs-keyword">new</span> YAHOO.widget.Paginator({
+			rowsPerPage: PAGE_SIZE,
+			totalRecords: NR_RESULTS,
+			containers: PAGE_CONTAINERS,
+			template: <span class="hljs-string">"{PreviousPageLink} {PageLinks} {NextPageLink}"</span>
+		});
+		PAGE.render();
+		PAGE.subscribe(<span class="hljs-string">'changeRequest'</span>, handlePagination);
+		pagination_hide();
+		FINDER_INITIALIZED = <span class="hljs-literal">true</span>;
+	}
+}
+
+<span class="hljs-comment">/*function toggleFacet(el){
+	$(el).toggleClassName('rbOpen');
+}*/</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pagination_hide</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">if</span> ($(<span class="hljs-string">'pagination_top'</span>)) $(<span class="hljs-string">'pagination_top'</span>).hide();
+	<span class="hljs-keyword">if</span> ($(<span class="hljs-string">'pagination_bottom'</span>)) $(<span class="hljs-string">'pagination_bottom'</span>).hide();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pagination_show</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">if</span> ($(<span class="hljs-string">'pagination_top'</span>)) $(<span class="hljs-string">'pagination_top'</span>).show();
+	<span class="hljs-keyword">if</span> ($(<span class="hljs-string">'pagination_bottom'</span>)) $(<span class="hljs-string">'pagination_bottom'</span>).show();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resetFacets</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">if</span> ($(<span class="hljs-string">'facets'</span>)) {
+		<span class="hljs-keyword">var</span> facets = $(<span class="hljs-string">'facets'</span>).select(<span class="hljs-string">'ul.rbList'</span>);
+		$$(<span class="hljs-string">'.ws_label'</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(el)</span> {</span>
+			el.removeClassName(<span class="hljs-string">'parent-selected'</span>);
+		});
+		facets.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item, index)</span> {</span>
+			$(item.id).update(<span class="hljs-string">''</span>);
+		});
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getExternalSourceResult</span><span class="hljs-params">(prefix, engine)</span> {</span>
+	<span class="hljs-keyword">if</span> ($(prefix + <span class="hljs-string">'_results'</span>).empty()) {
+		<span class="hljs-keyword">if</span> ($F(<span class="hljs-string">'query'</span>).blank()) {
+			alert(<span class="hljs-string">'Please enter a search string'</span>);
+		} <span class="hljs-keyword">else</span> {
+			searchExternalSource(prefix, engine);
+		}
+	} <span class="hljs-keyword">else</span> {
+		$(prefix + <span class="hljs-string">'_results'</span>).update();
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">doSearch</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">if</span> ($F(<span class="hljs-string">'query'</span>).blank()) {
+		alert(<span class="hljs-string">'Please enter a search string'</span>);
+		<span class="hljs-keyword">return</span>;
+	}
+	$(<span class="hljs-string">'searchMessage'</span>).hide();
+	<span class="hljs-comment">/*showFacets();*/</span>
+	resetFacets();
+	findMaterials(<span class="hljs-number">0</span>, PAGE_SIZE, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">externalSourceSelected</span><span class="hljs-params">(prefix)</span> {</span>
+	<span class="hljs-keyword">return</span> !$(prefix + <span class="hljs-string">'_results'</span>).empty();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">searchExternalSources</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; EXT_SOURCES.length; i++) {
+		<span class="hljs-keyword">if</span> (externalSourceSelected(EXT_SOURCES[i])) searchExternalSource(EXT_SOURCES[i]);
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepareQueryString</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">var</span> spq = $F(<span class="hljs-string">'query'</span>).split(<span class="hljs-string">'keyword:'</span>);
+	<span class="hljs-keyword">var</span> text = spq[<span class="hljs-number">0</span>];
+	<span class="hljs-keyword">if</span> (text.blank()) {
+		<span class="hljs-keyword">if</span> (spq.length &gt; <span class="hljs-number">1</span>) {
+			text = spq[<span class="hljs-number">1</span>];
+		}
+	}
+	text = text.strip();
+	<span class="hljs-keyword">return</span> text;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">searchByKeyword</span><span class="hljs-params">(key)</span> {</span>
+	$(<span class="hljs-string">'query'</span>).value = <span class="hljs-string">"keyword:"</span> + key;
+	doSearch();
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>function parseQueryString
+creates the query that needed for search
+special characters like spaces etc are removed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseQueryString</span><span class="hljs-params">(initUpdate)</span> {</span>
+	<span class="hljs-keyword">var</span> spq = $F(<span class="hljs-string">'query'</span>).split(<span class="hljs-string">'keyword:'</span>);
+	<span class="hljs-comment">/* var spq = $F('context').split('context:'); */</span>
+	<span class="hljs-keyword">var</span> plainText = spq[<span class="hljs-number">0</span>];
+	<span class="hljs-keyword">var</span> clauses = [];
+	<span class="hljs-keyword">var</span> selectedProviders;
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> customizeFinder == <span class="hljs-string">'function'</span>) {
+		<span class="hljs-keyword">var</span> customParams = customizeFinder();
+		<span class="hljs-keyword">if</span> (customParams.selectedProviders) selectedProviders = customParams.selectedProviders;
+	}
+	<span class="hljs-keyword">if</span> (!plainText.blank()) {
+		clauses.push({
+			language: <span class="hljs-string">'VSQL'</span>,
+			expression: plainText
+		});
+		<span class="hljs-keyword">var</span> lrt = getUrlVars()[<span class="hljs-string">"lrt"</span>];
+		<span class="hljs-keyword">var</span> key = getUrlVars()[<span class="hljs-string">"keyword"</span>];
+		<span class="hljs-keyword">var</span> context = getUrlVars()[<span class="hljs-string">"context"</span>];
+		<span class="hljs-keyword">var</span> urlSelectedProviders = getUrlVars()[<span class="hljs-string">"providers"</span>];
+		<span class="hljs-keyword">if</span> (lrt) {
+			lrt = lrt.replace(<span class="hljs-string">"#"</span>, <span class="hljs-string">""</span>).replace(<span class="hljs-string">"%20"</span>, <span class="hljs-string">" "</span>);
+			clauses.push({
+				language: <span class="hljs-string">'anyOf'</span>,
+				expression: <span class="hljs-string">'lrt:'</span> + lrt
+			});
+		}
+		<span class="hljs-keyword">if</span> (key) {
+			key = key.replace(<span class="hljs-string">"#"</span>, <span class="hljs-string">""</span>).replace(<span class="hljs-string">"%20"</span>, <span class="hljs-string">" "</span>);
+			clauses.push({
+				language: <span class="hljs-string">'anyOf'</span>,
+				expression: <span class="hljs-string">'keyword:'</span> + key
+			});
+		}
+		<span class="hljs-keyword">if</span> (context) {
+			context = context.replace(<span class="hljs-string">"#"</span>, <span class="hljs-string">""</span>).replace(<span class="hljs-string">"%20"</span>, <span class="hljs-string">" "</span>);
+			clauses.push({
+				language: <span class="hljs-string">'anyOf'</span>,
+				expression: <span class="hljs-string">'context:'</span> + context
+			});
+		}
+		<span class="hljs-keyword">if</span> (urlSelectedProviders) {
+			clauses.push({
+				language: <span class="hljs-string">'anyOf'</span>,
+				expression: <span class="hljs-string">'provider:'</span> + urlSelectedProviders
+			});
+		}
+		<span class="hljs-keyword">if</span> (!urlSelectedProviders &amp;&amp; selectedProviders) clauses.push({
+			language: <span class="hljs-string">'anyOf'</span>,
+			expression: <span class="hljs-string">'provider:'</span> + selectedProviders
+		});
+		<span class="hljs-comment">/*clauses.push({language:'anyOf',expression:'keyword:' + key});
+		clauses.push({language:'anyOf',expression:'lrt:image'});
+		It is to limit the results only for OE collection */</span>
+	}
+	<span class="hljs-keyword">if</span> (spq.length &gt; <span class="hljs-number">1</span>) {
+		<span class="hljs-keyword">var</span> keyword = spq[<span class="hljs-number">1</span>];
+		clauses.push({
+			language: <span class="hljs-string">'anyOf'</span>,
+			expression: <span class="hljs-string">'keyword:'</span> + keyword
+		});
+	}
+	<span class="hljs-keyword">if</span> (plainText.blank()) {
+		<span class="hljs-comment">/* clauses.push({language:'anyOf',expression:'provider:organicedunet'}); */</span>
+	}
+	<span class="hljs-keyword">return</span> clauses;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Get the parameters of the url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUrlVars</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">var</span> vars = {};
+	<span class="hljs-keyword">var</span> parts = window.location.href.replace(<span class="hljs-regexp">/[?&amp;]+([^=&amp;]+)=([^&amp;]*)/gi</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(m, key, value)</span> {</span>
+		vars[key] = value;
+	});
+	<span class="hljs-keyword">return</span> vars;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">formatInteger</span><span class="hljs-params">(number, com)</span> {</span>
+	<span class="hljs-keyword">var</span> num = number.toString();
+	<span class="hljs-keyword">var</span> rgx = <span class="hljs-regexp">/(\d+)(\d{3})/</span>;
+	<span class="hljs-keyword">while</span> (rgx.test(num)) {
+		num = num.replace(rgx, <span class="hljs-string">'$1'</span> + com + <span class="hljs-string">'$2'</span>);
+	}
+	<span class="hljs-keyword">return</span> num;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>findMaterials() function
+the function that makes the ajax request to bring back the results</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findMaterials</span><span class="hljs-params">(start, numberResults, needsUpdate, initUpdate)</span> {</span>
+	<span class="hljs-keyword">var</span> selectedFacets = $(<span class="hljs-string">'insert_facets'</span>).select(<span class="hljs-string">'a.facet-selected'</span>);
+	<span class="hljs-keyword">var</span> facetExpressions = $H();
+	selectedFacets.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item, index)</span> {</span>
+		<span class="hljs-keyword">var</span> pos = item.id.indexOf(<span class="hljs-string">':'</span>);
+		<span class="hljs-keyword">var</span> facet = item.id.substring(<span class="hljs-number">0</span>, pos);
+		<span class="hljs-keyword">var</span> facetValue = item.id.substring(pos + <span class="hljs-number">1</span>);
+		facetValue = facetValue.replace(<span class="hljs-regexp">/\"/g</span>, <span class="hljs-string">"'"</span>);
+		facetExpressions.set(facet, (facetExpressions.get(facet) == <span class="hljs-literal">undefined</span>) ? facetValue : facetExpressions.get(facet) + <span class="hljs-string">","</span> + facetValue);
+	});
+	<span class="hljs-keyword">var</span> clauses = parseQueryString(initUpdate);
+	facetExpressions.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(pair)</span> {</span>
+		clauses.push({
+			language: <span class="hljs-string">'anyOfFacet'</span>,
+			expression: pair.key + <span class="hljs-string">":"</span> + pair.value
+		});
+	});
+	FACET_INCLUDES.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(exp)</span> {</span>
+		clauses.push({
+			language: <span class="hljs-string">'anyOfFacet'</span>,
+			expression: exp
+		});
+	});
+
+	<span class="hljs-keyword">var</span> request = {
+		clause: clauses,
+		resultInfo: <span class="hljs-string">'display'</span>,
+		resultListOffset: start,
+		resultListSize: numberResults,
+		idListOffset: start,
+		uiLanguage: <span class="hljs-string">'en'</span>,
+		facets: FACET_TOKENS,
+		idListSize: numberResults,
+		resultFormat: <span class="hljs-string">'json'</span>,
+		resultSortkey: <span class="hljs-string">''</span>
+	};
+
+	<span class="hljs-keyword">if</span> (!$F(<span class="hljs-string">'query'</span>).blank()) $(<span class="hljs-string">'search_terms'</span>).update($F(<span class="hljs-string">'query'</span>));
+	$(<span class="hljs-string">'search_status'</span>).update(<span class="hljs-string">'Searching...'</span>);
+	$(<span class="hljs-string">'noResults'</span>).hide();
+	<span class="hljs-keyword">new</span> Ajax.JSONRequest(SERVICE_URL, {
+		callbackParamName: <span class="hljs-string">"callback"</span>,
+		method: <span class="hljs-string">'get'</span>,
+		parameters: {
+			json: <span class="hljs-built_in">Object</span>.toJSON(request),
+			engine: <span class="hljs-string">'InMemory'</span>
+		},
+		onSuccess: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(transport)</span> {</span>
+			<span class="hljs-keyword">var</span> result = transport.responseText.evalJSON(<span class="hljs-literal">true</span>).result;
+			$(<span class="hljs-string">'search_results'</span>).update(<span class="hljs-string">''</span>);
+			$(<span class="hljs-string">'noResults'</span>).hide();
+			$(<span class="hljs-string">'search_status'</span>).update(<span class="hljs-string">'Processing time: &lt;br&gt; &lt;span class="left_details"&gt;'</span> + (result.processingTime / <span class="hljs-number">1000</span>).toFixed(<span class="hljs-number">3</span>) + <span class="hljs-string">' seconds&lt;/span&gt;'</span>);
+			<span class="hljs-keyword">if</span> (initUpdate) {
+				$(<span class="hljs-string">'searchMessage'</span>).insert(<span class="hljs-string">'&lt;h3 align="center"&gt;Available: '</span> + formatInteger(result.nrOfResults, <span class="hljs-string">','</span>) + <span class="hljs-string">' learning resources&lt;/h3&gt;'</span>);
+			} <span class="hljs-keyword">else</span> {
+				$(<span class="hljs-string">'search_terms'</span>).update(<span class="hljs-string">'Results: '</span>);
+				$(<span class="hljs-string">'searchMessage'</span>).update(<span class="hljs-string">''</span>);
+				<span class="hljs-keyword">if</span> (result.metadata.size() == <span class="hljs-number">0</span>) {
+					$(<span class="hljs-string">'noResults'</span>).show();
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>CREATE EVERY ITEM BEFORE CALL RENDERING WITH JAML</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">var</span> oddCtr = <span class="hljs-number">0</span>; <span class="hljs-comment">//counter to add the odd style in listing</span>
+				result.metadata.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item, index)</span> {</span>
+					oddCtr++;
+					<span class="hljs-keyword">if</span> (item.format.indexOf(<span class="hljs-string">'pdf'</span>) != -<span class="hljs-number">1</span>) item.format = <span class="hljs-string">'../images/icons/pdf.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (item.format.indexOf(<span class="hljs-string">'powerpoint'</span>) != -<span class="hljs-number">1</span>) item.format = <span class="hljs-string">'../images/icons/ppt.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (item.format.indexOf(<span class="hljs-string">'video'</span>) != -<span class="hljs-number">1</span>) item.format = <span class="hljs-string">'../images/icons/video.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (item.format.indexOf(<span class="hljs-string">'zip'</span>) != -<span class="hljs-number">1</span>) item.format = <span class="hljs-string">'../images/icons/zip.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (item.format.indexOf(<span class="hljs-string">'audio'</span>) != -<span class="hljs-number">1</span>) item.format = <span class="hljs-string">'../images/icons/audio.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((item.format.indexOf(<span class="hljs-string">'text'</span>) != -<span class="hljs-number">1</span>) || (item.format.indexOf(<span class="hljs-string">'multipart'</span>) != -<span class="hljs-number">1</span>)) item.format = <span class="hljs-string">'../images/icons/url.png'</span>;
+					<span class="hljs-comment">/* item.format='http://open.thumbshots.org/image.aspx?url='+'item.location'; */</span>
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((item.format.indexOf(<span class="hljs-string">'xml'</span>) != -<span class="hljs-number">1</span> || item.format.indexOf(<span class="hljs-string">'XML'</span>) != -<span class="hljs-number">1</span>)) item.format = <span class="hljs-string">'../images/icons/xml.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (item.format.indexOf(<span class="hljs-string">'image'</span>) != -<span class="hljs-number">1</span>) item.format = <span class="hljs-string">'../images/icons/image.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((item.format.indexOf(<span class="hljs-string">'word'</span>) != -<span class="hljs-number">1</span>) || (item.format.indexOf(<span class="hljs-string">'wordprocessingml'</span>) != -<span class="hljs-number">1</span>)) item.format = <span class="hljs-string">'../images/icons/word.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((item.format.indexOf(<span class="hljs-string">'application'</span>) != -<span class="hljs-number">1</span>)) item.format = <span class="hljs-string">'../images/icons/application.png'</span>;
+					<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ((item.format == <span class="hljs-string">''</span>)) item.format = <span class="hljs-string">'../images/icons/application.png'</span>;
+					<span class="hljs-keyword">else</span> item.format = <span class="hljs-string">'../images/icons/url.png'</span>;
+					<span class="hljs-comment">/* example of mdPath : home/workflow/repository/LOM/DIGITALGREEN/1455.xml */</span>
+					<span class="hljs-keyword">var</span> spliter1 = item.mdPath.split(<span class="hljs-string">"/"</span>);
+					<span class="hljs-keyword">var</span> spliter2 = spliter1[spliter1.length - <span class="hljs-number">1</span>].split(<span class="hljs-string">"."</span>);
+					item.identifier = spliter2[<span class="hljs-number">0</span>];
+					item.isOdd = oddCtr;
+					<span class="hljs-keyword">if</span> (item.keywords == <span class="hljs-literal">undefined</span> || item.keywords == <span class="hljs-string">''</span>) $(<span class="hljs-string">'search_results'</span>).insert(Jaml.render(<span class="hljs-string">'resultwithoutkeywords'</span>, item));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>changed resultWITHOUTkeywords to result</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">else</span> {
+						<span class="hljs-keyword">try</span> {
+							item.keywords = item.keywords.split(<span class="hljs-string">","</span>);
+						} <span class="hljs-keyword">catch</span> (e) {}
+						<span class="hljs-keyword">var</span> spt = item.title.split(<span class="hljs-string">","</span>, <span class="hljs-number">1</span>);
+						item.title = spt[<span class="hljs-number">0</span>];
+						<span class="hljs-keyword">var</span> length = spt[<span class="hljs-number">0</span>].length;
+						<span class="hljs-keyword">if</span> (item.title[<span class="hljs-number">0</span>] == <span class="hljs-string">'['</span>) item.title = item.title.substring(<span class="hljs-number">1</span>, length);
+						<span class="hljs-keyword">else</span> item.title = item.title.substring(<span class="hljs-number">0</span>, length);
+						length = END_DESCRIPTION;
+						<span class="hljs-keyword">if</span> (item.description[<span class="hljs-number">0</span>] == <span class="hljs-string">'['</span>) item.description = item.description.substring(<span class="hljs-number">1</span>, length);
+						<span class="hljs-keyword">else</span> item.description = item.description.substring(<span class="hljs-number">0</span>, length);
+						<span class="hljs-keyword">if</span> (item.description.indexOf(<span class="hljs-string">']'</span>) != -<span class="hljs-number">1</span>) {
+							spt = item.description.split(<span class="hljs-string">"]"</span>);
+							item.description = spt[<span class="hljs-number">0</span>];
+						}
+						$(<span class="hljs-string">'search_results'</span>).insert(Jaml.render(<span class="hljs-string">'result'</span>, item));
+						iter++;
+					}
+				});
+
+				$(<span class="hljs-string">'search_results_index'</span>).show();
+				<span class="hljs-keyword">var</span> finalNumberResults = ((start + numberResults) &lt; result.nrOfResults) ? (start + numberResults) : result.nrOfResults;
+				<span class="hljs-keyword">if</span> (result.nrOfResults &gt; <span class="hljs-number">0</span>) {
+					$(<span class="hljs-string">'search_results_index'</span>).update(<span class="hljs-string">'&lt;br&gt; &lt;span class="left_details"&gt;(#{start} - #{end} of #{total})&lt;/span&gt;'</span>.interpolate({
+						start: formatInteger(start + <span class="hljs-number">1</span>, THOUSAND_SEP),
+						end: formatInteger(finalNumberResults, THOUSAND_SEP),
+						total: formatInteger(result.nrOfResults, THOUSAND_SEP)
+					}));
+					pagination_show();
+				} <span class="hljs-keyword">else</span> {
+					$(<span class="hljs-string">'search_results_index'</span>).update(<span class="hljs-string">'(No Results Found)'</span>);
+					pagination_hide();
+				}
+
+			}
+
+			<span class="hljs-keyword">if</span> (needsUpdate) {
+				updatePaginator(result.nrOfResults);
+				result.facets.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item, index)</span> {</span>
+					<span class="hljs-keyword">var</span> fld = item.field;
+					<span class="hljs-comment">/*rbkey = facetKeys[fld];*/</span>
+					<span class="hljs-keyword">var</span> facetHasNoLimit = <span class="hljs-literal">true</span>;
+					<span class="hljs-keyword">var</span> limitValues = [];
+					<span class="hljs-keyword">if</span> (LIMIT_FACET_DISPLAY[fld]) {
+						limitValues = LIMIT_FACET_DISPLAY[fld];
+						facetHasNoLimit = <span class="hljs-literal">false</span>;
+					}
+					<span class="hljs-keyword">var</span> rbkey = fld;
+					<span class="hljs-keyword">var</span> element = $(rbkey + <span class="hljs-string">'_rbo'</span>);
+					<span class="hljs-keyword">if</span> (element &amp;&amp; facetExpressions.get(fld) == <span class="hljs-literal">undefined</span>) {
+						element.update(<span class="hljs-string">''</span>);
+						<span class="hljs-keyword">if</span> (item.numbers != <span class="hljs-literal">undefined</span>) {
+							item.numbers.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(it2, idx2)</span> {</span>
+								<span class="hljs-keyword">if</span> (facetHasNoLimit || limitValues.indexOf(it2.val) &gt;= <span class="hljs-number">0</span>) {
+									it2.field = fld;
+									it2.val = it2.val.replace(<span class="hljs-regexp">/\'/g</span>, <span class="hljs-string">"&amp;#34;"</span>);
+									it2.count = formatInteger(it2.count, THOUSAND_SEP);
+									<span class="hljs-comment">/*element.insert(Jaml.render('rbcriteria',it2));*/</span>
+									<span class="hljs-keyword">if</span> (fld != <span class="hljs-string">"language"</span>) {
+										element.insert(Jaml.render(<span class="hljs-string">'rbcriteria'</span>, it2));
+									} <span class="hljs-keyword">else</span> {
+									<span class="hljs-comment">/* check first if langName[it2.val] exists already in rbList*/</span>
+										checkLang(it2.val, it2.count);
+										<span class="hljs-keyword">if</span> (CHECK == <span class="hljs-number">0</span>) {
+											element.insert(Jaml.render(<span class="hljs-string">'rbcriteria2'</span>, it2));
+										}
+									}
+								}
+							});
+						}
+					}
+				});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>bind and triggers the function for sliding in facets!</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				facetSlide();
+				selectedFacets.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item, index)</span> {</span>
+					$(item.id).addClassName(<span class="hljs-string">'facet-selected'</span>);
+				});
+			}
+		},
+		onComplete: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(transport)</span> {</span>
+			<span class="hljs-comment">/*$('search_status').update('');*/</span>
+		},
+		onLoading: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			$(<span class="hljs-string">'search_results'</span>).update(<span class="hljs-string">''</span>);
+			$(<span class="hljs-string">'search_terms'</span>).update(<span class="hljs-string">''</span>);
+			$(<span class="hljs-string">'search_results_index'</span>).update(<span class="hljs-string">''</span>);
+		}
+	});
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkLang</span><span class="hljs-params">(name, counter)</span> {</span>
+	CHECK = <span class="hljs-number">0</span>;
+	$$(<span class="hljs-string">'#language_rbo li'</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(item)</span> {</span>
+		<span class="hljs-keyword">var</span> pos = item.id.indexOf(<span class="hljs-string">':'</span>);
+		<span class="hljs-keyword">var</span> langValue = item.id.substring(pos + <span class="hljs-number">1</span>);
+		<span class="hljs-keyword">if</span> (langName[langValue] == langName[name]) {
+			<span class="hljs-comment">/* pos = item.name.indexOf('/a'); */</span>
+			<span class="hljs-keyword">var</span> count = item.innerHTML;
+			pos = count.indexOf(<span class="hljs-string">'/a'</span>);
+			<span class="hljs-keyword">var</span> length = count.length;
+			count = item.innerHTML.substring(pos + <span class="hljs-number">5</span>, length - <span class="hljs-number">1</span>);
+			count = count.replace(<span class="hljs-string">","</span>, <span class="hljs-string">""</span>);
+			<span class="hljs-keyword">var</span> num = count * <span class="hljs-number">1</span>;
+			num = <span class="hljs-built_in">Number</span>(num) + <span class="hljs-built_in">Number</span>(counter);
+			num = formatInteger(num, THOUSAND_SEP);
+			item.update(item.innerHTML.substring(<span class="hljs-number">0</span>, pos + <span class="hljs-number">4</span>) + <span class="hljs-string">'(#{count})'</span>.interpolate({
+				count: num
+			}));
+			CHECK = <span class="hljs-number">1</span>;
+			<span class="hljs-keyword">return</span>;
+		}
+	});
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addEndingDescription</span><span class="hljs-params">(data)</span> {</span>
+	<span class="hljs-keyword">if</span> (data.length == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;
+	<span class="hljs-keyword">return</span> (data.length &lt; END_DESCRIPTION) ? data : (data.substr(START_DESCRIPTION, END_DESCRIPTION)).concat(<span class="hljs-string">""</span>, <span class="hljs-string">" &lt;span class='suspension-points'&gt;...&lt;/span&gt;"</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeHtmlTags</span><span class="hljs-params">(data)</span> {</span>
+	<span class="hljs-keyword">var</span> strInputCode = data.replace(<span class="hljs-regexp">/&amp;(lt|gt);/g</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(strMatch, p1)</span> {</span>
+		<span class="hljs-keyword">return</span> (p1 == <span class="hljs-string">"lt"</span>) ? <span class="hljs-string">"&lt;"</span> : <span class="hljs-string">"&gt;"</span>;
+	});
+	<span class="hljs-keyword">var</span> strTagStrippedText = strInputCode.replace(<span class="hljs-regexp">/&lt;\/?[^&gt;]+(&gt;|$)/g</span>, <span class="hljs-string">" "</span>);
+	<span class="hljs-keyword">return</span> strTagStrippedText;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">stripUrl</span><span class="hljs-params">(data)</span> {</span>
+	<span class="hljs-keyword">var</span> strTagStrippedText = data.replace(<span class="hljs-regexp">/&lt;\/?[^&gt;]:+(&gt;|$)/g</span>, <span class="hljs-string">"_"</span>);
+	<span class="hljs-keyword">return</span> strTagStrippedText;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <h2 id="jaml-templates">JAML templates</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>JAML is a simple  template engine for javascript
+Here is a <a href="https://github.com/edspencer/jaml">link</a> for more info and tutorials</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initializeJamlTemplates</span><span class="hljs-params">()</span> {</span>
+	Jaml.register(<span class="hljs-string">'thumb_pres'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+		a({
+			href: data.location,
+			title: data.title,
+			target: <span class="hljs-string">'_blank'</span>
+		}, img({
+			src: data.format,
+			height: <span class="hljs-string">"48"</span>,
+			width: <span class="hljs-string">"48"</span>
+		}))
+		<span class="hljs-comment">/* img({src:'http://open.thumbshots.org/image.aspx?url='+'http://edis.ifas.ufl.edu/topic_ag_peanuts'})*/</span>
+	});
+	Jaml.register(<span class="hljs-string">'keyword'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+		a({
+			href: <span class="hljs-string">'javascript:void(0);'</span>,
+			onclick: <span class="hljs-string">"searchByKeyword('#{key}')"</span>.interpolate({
+				key: data
+			})
+		}, data);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>RENDER RESULT LISTING ITEMS</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Jaml.register(<span class="hljs-string">'result'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+		<span class="hljs-keyword">var</span> keywordsToEmbed = <span class="hljs-string">""</span>;
+		<span class="hljs-keyword">var</span> odd = <span class="hljs-string">""</span>;
+		<span class="hljs-keyword">if</span> (data.isOdd % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
+			odd = <span class="hljs-string">"odd"</span>
+		}
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, length = data.keywords.length; i &lt; length; i++) {
+			<span class="hljs-keyword">if</span> (i !== length - <span class="hljs-number">1</span>) {
+				keywordsToEmbed += <span class="hljs-string">"&lt;a class=\"secondary\" href=\"listing.html?query="</span> + data.keywords[i] + <span class="hljs-string">"\"&gt;&amp;nbsp"</span> + data.keywords[i] + <span class="hljs-string">"&lt;/a&gt;"</span>
+			} <span class="hljs-keyword">else</span> {
+				keywordsToEmbed += <span class="hljs-string">"&lt;a class=\"secondary last\" href=\"listing.html?query="</span> + data.keywords[i].split(<span class="hljs-string">" "</span>)[<span class="hljs-number">0</span>] + <span class="hljs-string">"\"&gt;&amp;nbsp"</span> + data.keywords[i] + <span class="hljs-string">"&lt;/a&gt;"</span>
+			}
+		}
+		article({
+			<span class="hljs-keyword">class</span>: <span class="hljs-string">'item-intro '</span> + odd
+		}, header(
+		h2(img({
+			src: data.format
+		}), a({
+			href: data.location,
+			title: data.title,
+			target: <span class="hljs-string">'_blank'</span>
+		}, data.title)), section(p({
+			cls: <span class="hljs-string">'item-intro-desc'</span>
+		}, data.description), aside({
+			cls: <span class="hljs-string">'clearfix'</span>
+		}, div({
+			cls: <span class="hljs-string">'floatleft'</span>
+		}, div({
+			cls: <span class="hljs-string">'line keywords'</span>
+		}, span(<span class="hljs-string">"Keywords:"</span>), keywordsToEmbed <span class="hljs-comment">/*item.keywords*/</span> )), div({
+			cls: <span class="hljs-string">'floatright'</span>
+		}, div({
+			cls: <span class="hljs-string">'line alignright'</span>
+		}, a({
+			href: <span class="hljs-string">"item.html?id="</span> + data.identifier,
+			cls: <span class="hljs-string">'moreinfo'</span>
+		}, <span class="hljs-string">"More Info"</span>)))))))
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>RENDER RESULT LISTING ITEMS if there aren’t keywords</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Jaml.register(<span class="hljs-string">'resultwithoutkeywords'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+	  <span class="hljs-comment">/*odd++;
+	  var backgroundClass = ""
+	  if(odd%2===0){backgroundClass = "odd";}*/</span>
+		<span class="hljs-keyword">var</span> keywordsToEmbed = <span class="hljs-string">""</span>;
+		<span class="hljs-keyword">var</span> odd = <span class="hljs-string">""</span>;
+		<span class="hljs-keyword">if</span> (data.isOdd % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
+			odd = <span class="hljs-string">"odd"</span>
+		}
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, length = data.keywords.length; i &lt; length; i++) {
+			<span class="hljs-keyword">if</span> (i !== length - <span class="hljs-number">1</span>) {
+				keywordsToEmbed += <span class="hljs-string">"&lt;a class=\"secondary\" href=\"listing.html?query="</span> + data.keywords[i] + <span class="hljs-string">"\"&gt;&amp;nbsp"</span> + data.keywords[i] + <span class="hljs-string">"&lt;/a&gt;"</span>
+			} <span class="hljs-keyword">else</span> {
+				keywordsToEmbed += <span class="hljs-string">"&lt;a class=\"secondary last\" href=\"listing.html?query="</span> + data.keywords[i].split(<span class="hljs-string">" "</span>)[<span class="hljs-number">0</span>] + <span class="hljs-string">"\"&gt;&amp;nbsp"</span> + data.keywords[i] + <span class="hljs-string">"&lt;/a&gt;"</span>
+			}
+		}
+		article({
+			<span class="hljs-keyword">class</span>: <span class="hljs-string">'item-intro '</span> + odd
+		}, header(
+		h2(img({
+			src: data.format
+		}), a({
+			href: data.location,
+			title: data.title,
+			target: <span class="hljs-string">'_blank'</span>
+		}, data.title)), section(p({
+			cls: <span class="hljs-string">'item-intro-desc'</span>
+		}, data.description), aside({
+			cls: <span class="hljs-string">'clearfix'</span>
+		}, div({
+			cls: <span class="hljs-string">'floatright'</span>
+		}, div({
+			cls: <span class="hljs-string">'line alignright'</span>
+		}, a({
+			href: <span class="hljs-string">"item.html?id="</span> + data.identifier,
+			cls: <span class="hljs-string">'moreinfo'</span>
+		}, <span class="hljs-string">"More Info"</span>)))))))
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>RENDER FACETS</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Jaml.register(<span class="hljs-string">'rbcriteria'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+		<span class="hljs-keyword">var</span> label = data.val;
+		<span class="hljs-keyword">if</span> (providerName[data.val]) {
+			label = providerName[data.val];
+		}
+
+		<span class="hljs-comment">/* manually replacement of a special mapping - BAD BAD practice!!! */</span>
+		<span class="hljs-keyword">if</span> (label == <span class="hljs-string">'teacher'</span>) { label = <span class="hljs-string">"instructor"</span>; }
+
+		a({
+			href: <span class="hljs-string">'#'</span>,
+			id: data.field + <span class="hljs-string">':'</span> + data.val,
+			title: data.val,
+			onclick: <span class="hljs-string">"toggleFacetValue('#{id}','#{parent}')"</span>.interpolate({
+				id: data.field + <span class="hljs-string">':'</span> + data.val,
+				parent: data.field
+			})
+		}, span(label), span({
+			cls: <span class="hljs-string">'total'</span>
+		}, data.count));
+	});
+	Jaml.register(<span class="hljs-string">'rbcriteria2'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+		a({
+			href: <span class="hljs-string">'#'</span>,
+			id: data.field + <span class="hljs-string">':'</span> + data.val,
+			title: data.val,
+			onclick: <span class="hljs-string">"toggleFacetValue('#{id}','#{parent}')"</span>.interpolate({
+				id: data.field + <span class="hljs-string">':'</span> + data.val,
+				parent: data.field
+			})
+		}, span(langName[data.val]), span({
+			cls: <span class="hljs-string">'total'</span>
+		}, data.count));
+		<span class="hljs-comment">/*       li({id: data.field + ':' + data.val},
+		         a({href:'javascript:void(0);', title: data.val,onclick: "toggleFacetValue('#{id}','#{parent}')".interpolate({id: data.field + ':' + data.val,parent: data.field}),},
+		          span(langName[data.val]), span({cls:'total'}, data.count )));*/</span>
+	});
+
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; EXT_SOURCES.length; i++) {
+		Jaml.register(EXT_SOURCES[i] + <span class="hljs-string">'_field'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+			a({
+				href: data.apiurl,
+				title: data.title,
+				target: <span class="hljs-string">'_blank'</span>
+			}, <span class="hljs-string">"&lt;br&gt;("</span> + formatInteger(data.nrOfResults, THOUSAND_SEP) + <span class="hljs-string">" results)"</span>);
+		});
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">facetSlide</span><span class="hljs-params">()</span> {</span>
+	jQuery(document).ready(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+		jQuery(<span class="hljs-string">'.filter_parent'</span>).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">if</span> (jQuery(<span class="hljs-keyword">this</span>).hasClass(<span class="hljs-string">"opened"</span>)) jQuery(<span class="hljs-keyword">this</span>).next().css(<span class="hljs-string">"display"</span>, <span class="hljs-string">"block"</span>);
+		});
+		jQuery(<span class="hljs-string">'.filter_parent'</span>).click(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> {</span>
+			event.preventDefault();
+			jQuery(<span class="hljs-keyword">this</span>).toggleClass(<span class="hljs-string">"opened"</span>);
+			jQuery(<span class="hljs-keyword">this</span>).next().slideToggle(<span class="hljs-string">"slow"</span>);
+		});
+		exit();
+	});
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updatePaginator</span><span class="hljs-params">(NR_RESULTS)</span> {</span>
+	PAGE.set(<span class="hljs-string">'totalRecords'</span>, NR_RESULTS);
+	PAGE.set(<span class="hljs-string">'recordOffset'</span>, <span class="hljs-number">0</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handlePagination</span><span class="hljs-params">(newState)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Collect page data using the requested page number</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	findMaterials(newState.recordOffset, newState.rowsPerPage, <span class="hljs-literal">false</span>, <span class="hljs-literal">false</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Update the Paginator’s state</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	PAGE.setState(newState);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">selectParent</span><span class="hljs-params">(parent)</span> {</span>
+	<span class="hljs-keyword">var</span> childSelected = <span class="hljs-literal">false</span>;
+	$(parent + <span class="hljs-string">'_rbo'</span>).childElements().each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(el)</span> {</span>
+		<span class="hljs-keyword">if</span> (el.hasClassName(<span class="hljs-string">'facet-selected'</span>)) {
+			$(parent).addClassName(<span class="hljs-string">'parent-selected'</span>);
+			childSelected = <span class="hljs-literal">true</span>;
+		}
+	});
+	<span class="hljs-keyword">if</span> (!childSelected) $(parent).removeClassName(<span class="hljs-string">'parent-selected'</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toggleFacetValue</span><span class="hljs-params">(elem, parent)</span> {</span>
+	$(elem).toggleClassName(<span class="hljs-string">'facet-selected'</span>);
+	<span class="hljs-comment">/* $(elem).toggleClassName('active'); */</span>
+	selectParent(parent);
+	findMaterials(<span class="hljs-number">0</span>, PAGE_SIZE, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">html_entity_decode</span><span class="hljs-params">(str)</span> {</span>
+	<span class="hljs-keyword">var</span> ta = document.createElement(<span class="hljs-string">"textarea"</span>);
+	ta.innerHTML = str.replace(<span class="hljs-regexp">/&lt;/g</span>, <span class="hljs-string">"&amp;lt;"</span>).replace(<span class="hljs-regexp">/&gt;/g</span>, <span class="hljs-string">"&amp;gt;"</span>);
+	<span class="hljs-keyword">var</span> val = ta.value;
+	ta.parentNode.removeChild(ta);
+	<span class="hljs-keyword">return</span> val;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fullLangName</span><span class="hljs-params">(iso)</span> {</span>
+	<span class="hljs-keyword">var</span> fullName = <span class="hljs-string">""</span>;
+	<span class="hljs-keyword">if</span> (iso == <span class="hljs-string">"en"</span>) fullName = langName[<span class="hljs-string">"en"</span>];
+	<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (iso == <span class="hljs-string">"fr"</span>) fullName = langName[<span class="hljs-string">"fr"</span>];
+	<span class="hljs-keyword">return</span> fullName;
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

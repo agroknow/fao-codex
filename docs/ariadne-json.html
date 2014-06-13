@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ariadne-json.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>ariadne-json.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h2 id="view-item-related-functions">VIEW ITEM related functions</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>getItemJSONP function
+we get a json array and manipulate it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getItemJSONP</span><span class="hljs-params">(urlTemp)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>alert(urlTemp);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	jQuery.ajax({
+		url: urlTemp,
+		dataType: <span class="hljs-string">"jsonp"</span>,
+		success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>alert(data);
+parse array and create an JS Object Array
+every item is a JSON</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">var</span> arrayWithJSONS = <span class="hljs-built_in">JSON</span>.parse(data);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h2 id="if-languageblocks-is-array">if languageBlocks is Array</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks.length !== <span class="hljs-literal">undefined</span> &amp;&amp; arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks !== <span class="hljs-literal">undefined</span>) {
+				<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks.length; i++) <span class="hljs-comment">//run all different languages version of this item</span>
+				{
+					<span class="hljs-keyword">var</span> language = <span class="hljs-built_in">Object</span>.keys(arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks[i]); <span class="hljs-comment">//keys for different language versions of this item. (i.e en, gr, no,)</span>
+					languageBlock = arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks[i][language[<span class="hljs-number">0</span>]];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>We always get language[0] as key</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>title</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (languageBlock.title !== <span class="hljs-literal">undefined</span>) {
+						document.getElementById(<span class="hljs-string">'itemTitle'</span>).innerHTML = languageBlock.title;
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>description</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (languageBlock.description !== <span class="hljs-literal">undefined</span>) {
+						document.getElementById(<span class="hljs-string">'itemDescription'</span>).innerHTML = languageBlock.description;
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>item url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url !== <span class="hljs-literal">undefined</span>) {
+						jQuery(<span class="hljs-string">'#itemAccess'</span>).append(<span class="hljs-string">'&lt;a target="_blank" href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" class="access  secondary"&gt;Access to the resource&lt;/a&gt;'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>icon for item thumb</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter !== <span class="hljs-literal">undefined</span>) {
+							<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter == <span class="hljs-string">'text/html'</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="http://open.thumbshots.org/image.aspx?url='</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter == <span class="hljs-string">'text/xml'</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/xml.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"/pdf"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/pdf.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"excel"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/x-applix-spreadsheet.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"word"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/word.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"ppt"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/ppt.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"application"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/application.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"audio"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/audio.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"video"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/video.png" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"image"</span>) &gt;= <span class="hljs-number">0</span>) {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> {
+								jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="http://open.thumbshots.org/image.aspx?url='</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+							}
+						} <span class="hljs-keyword">else</span> {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="http://open.thumbshots.org/image.aspx?url='</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+						}
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>media format</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter !== <span class="hljs-literal">undefined</span>) {
+						jQuery(<span class="hljs-string">'#itemMediaFormat'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter + <span class="hljs-string">'&lt;/span&gt;'</span>);
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>age range</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.ageRange !== <span class="hljs-literal">undefined</span>) {
+						jQuery(<span class="hljs-string">'#ageRange'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.ageRange + <span class="hljs-string">'&lt;/span&gt;'</span>);
+						jQuery(<span class="hljs-string">'#itemAgeRange'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.ageRange + <span class="hljs-string">'&lt;/span&gt;'</span>);
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>rights</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url !== <span class="hljs-literal">undefined</span>) {
+						<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nc-sa"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nc-sa.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nc-nd"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nc-nd.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nd"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nd.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-sa"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-sa.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nc"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nc.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+						} <span class="hljs-keyword">else</span> {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'&lt;/a&gt;&lt;/nav&gt;'</span>);
+						}
+					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.description !== <span class="hljs-literal">undefined</span>) {
+						<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.description[<span class="hljs-string">'en'</span>] !== <span class="hljs-literal">undefined</span>) {
+							jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.description[<span class="hljs-string">'en'</span>] + <span class="hljs-string">'&lt;/nav&gt;'</span>);
+						}
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>set</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].set !== <span class="hljs-literal">undefined</span>) {
+						jQuery(<span class="hljs-string">'#itemCollection'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].set + <span class="hljs-string">'&lt;/span&gt;'</span>);
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>language</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].language !== <span class="hljs-literal">undefined</span>) {
+						jQuery(<span class="hljs-string">'#itemLanguage'</span>).append(<span class="hljs-string">'&lt;span class="flag '</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].language + <span class="hljs-string">'flag"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].language + <span class="hljs-string">'&lt;/span&gt;'</span>);
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>end user role</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles.length !== <span class="hljs-literal">undefined</span>) {
+						<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+						{
+							<span class="hljs-keyword">if</span> (j == arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles.length - <span class="hljs-number">1</span>) {
+								jQuery(<span class="hljs-string">'#itemIntendedAudience'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+							} <span class="hljs-keyword">else</span> {
+								jQuery(<span class="hljs-string">'#itemIntendedAudience'</span>).append(<span class="hljs-string">'&lt;span class="forKomma"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+							}
+						}
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>learning resource type</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes.length !== <span class="hljs-literal">undefined</span>) {
+						<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+						{
+							<span class="hljs-keyword">if</span> (j == arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes.length - <span class="hljs-number">1</span>) {
+								jQuery(<span class="hljs-string">'#itemResourceType'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+							} <span class="hljs-keyword">else</span> {
+								jQuery(<span class="hljs-string">'#itemResourceType'</span>).append(<span class="hljs-string">'&lt;span class="forKomma"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+							}
+						}
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>contexts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts.length !== <span class="hljs-literal">undefined</span>) {
+						<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+						{
+							<span class="hljs-keyword">if</span> (j == arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts.length - <span class="hljs-number">1</span>) {
+								jQuery(<span class="hljs-string">'#itemEducationalContext'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+							} <span class="hljs-keyword">else</span> {
+								jQuery(<span class="hljs-string">'#itemEducationalContext'</span>).append(<span class="hljs-string">'&lt;span class="forKomma"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+							}
+						}
+					}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>keywords</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (languageBlock.keywords.length !== <span class="hljs-literal">undefined</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <pre><code>           jQuery(<span class="hljs-string">'#keywords'</span>).append(<span class="hljs-string">'&lt;div&gt;&lt;ul class="itemKeywords"&gt;&lt;li&gt;&lt;span&gt;Keywords:&lt;/span&gt;&lt;nav id="itemKeywords" class="inline-nav clearfix"&gt; &lt;!--auto-generated--&gt;&lt;/nav&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;'</span>);
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; languageBlock.keywords.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+						{
+							<span class="hljs-keyword">if</span> (j == languageBlock.keywords.length - <span class="hljs-number">1</span>) {
+								jQuery(<span class="hljs-string">'#itemKeywords'</span>).append(<span class="hljs-string">'&lt;a  href="listing.html?query='</span> + languageBlock.keywords[j] + <span class="hljs-string">'" class="forKomma link last"&gt;'</span> + languageBlock.keywords[j] + <span class="hljs-string">'&lt;/a&gt;'</span>);
+							} <span class="hljs-keyword">else</span> {
+								jQuery(<span class="hljs-string">'#itemKeywords'</span>).append(<span class="hljs-string">'&lt;a  href="listing.html?query='</span> + languageBlock.keywords[j] + <span class="hljs-string">'" class="forKomma link"&gt;'</span> + languageBlock.keywords[j] + <span class="hljs-string">'&lt;/a&gt;'</span>);
+							}
+						}
+					}
+				}
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h2 id="if-languageblocks-has-only-one-value-not-array">if languageBlocks has ONLY one value =&gt; not array</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks.length == <span class="hljs-literal">undefined</span> &amp;&amp; arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks !== <span class="hljs-literal">undefined</span>) {
+				<span class="hljs-keyword">var</span> language = <span class="hljs-built_in">Object</span>.keys(arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks); <span class="hljs-comment">//keys for different language versions of this item. (i.e en, gr, no,)</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>get always language “en” if exists, else we get the first one</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks[<span class="hljs-string">'en'</span>] == <span class="hljs-literal">undefined</span>) {
+					languageBlock = arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks[language[<span class="hljs-number">0</span>]]; <span class="hljs-comment">// We always get language[0] as key</span>
+				} <span class="hljs-keyword">else</span> {
+					languageBlock = arrayWithJSONS[<span class="hljs-number">0</span>].languageBlocks[<span class="hljs-string">'en'</span>]; <span class="hljs-comment">// We always get language['en'] as key</span>
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>title</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (languageBlock.title !== <span class="hljs-literal">undefined</span>) {
+					document.getElementById(<span class="hljs-string">'itemTitle'</span>).innerHTML = languageBlock.title;
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>description</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (languageBlock.description !== <span class="hljs-literal">undefined</span>) {
+					document.getElementById(<span class="hljs-string">'itemDescription'</span>).innerHTML = languageBlock.description;
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>item url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url !== <span class="hljs-literal">undefined</span>) {
+					jQuery(<span class="hljs-string">'#itemAccess'</span>).append(<span class="hljs-string">'&lt;a target="_blank" href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" class="access  secondary"&gt;Access to the resource&lt;/a&gt;'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>icon for item thumb</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter !== <span class="hljs-literal">undefined</span>) {
+						<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter == <span class="hljs-string">'text/html'</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="http://open.thumbshots.org/image.aspx?url='</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter == <span class="hljs-string">'text/xml'</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/xml.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"/pdf"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/pdf.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"excel"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/x-applix-spreadsheet.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"word"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/word.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"ppt"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/ppt.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"application"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/application.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"audio"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/audio.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"video"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img  src="../images/icons/video.png" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter.search(<span class="hljs-string">"image"</span>) &gt;= <span class="hljs-number">0</span>) {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> {
+							jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="http://open.thumbshots.org/image.aspx?url='</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+						}
+					} <span class="hljs-keyword">else</span> {
+						jQuery(<span class="hljs-string">'#itemThumb'</span>).append(<span class="hljs-string">'&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'"&gt;&lt;img class="itemsMedia" src="http://open.thumbshots.org/image.aspx?url='</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].items[<span class="hljs-number">0</span>].url + <span class="hljs-string">'" /&gt; &lt;/a&gt;'</span>);
+					}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>parameter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter !== <span class="hljs-literal">undefined</span>) {
+					jQuery(<span class="hljs-string">'#itemMediaFormat'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].manifestations[<span class="hljs-number">0</span>].parameter + <span class="hljs-string">'&lt;/span&gt;'</span>);
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>age range</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.ageRange !== <span class="hljs-literal">undefined</span>) {
+					jQuery(<span class="hljs-string">'#ageRange'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.ageRange + <span class="hljs-string">'&lt;/span&gt;'</span>);
+					jQuery(<span class="hljs-string">'#itemAgeRange'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.ageRange + <span class="hljs-string">'&lt;/span&gt;'</span>);
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>rights</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url !== <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nc-sa"</span>) &gt;= <span class="hljs-number">0</span>) {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nc-sa.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nc-nd"</span>) &gt;= <span class="hljs-number">0</span>) {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nc-nd.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nd"</span>) &gt;= <span class="hljs-number">0</span>) {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nd.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-sa"</span>) &gt;= <span class="hljs-number">0</span>) {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-sa.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by-nc"</span>) &gt;= <span class="hljs-number">0</span>) {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by-nc.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+					} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.url.search(<span class="hljs-string">"licenses/by"</span>) &gt;= <span class="hljs-number">0</span>) {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span style="position:relative;top:-10px;"&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;&lt;img style="display:inline;" src="../images/cc/cc-by.png"&gt;&lt;/a&gt;&lt;/nav&gt;'</span>);
+					} <span class="hljs-keyword">else</span> {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;&lt;a href="'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'" class="secondary" target="_blank"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.url + <span class="hljs-string">'&lt;/a&gt;&lt;/nav&gt;'</span>);
+					}
+				} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.description !== <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].rights.description[<span class="hljs-string">'en'</span>] !== <span class="hljs-literal">undefined</span>) {
+						jQuery(<span class="hljs-string">'#itemRights'</span>).append(<span class="hljs-string">'&lt;span&gt;Rights: &lt;/span&gt;&lt;nav  class="itemRights"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].rights.description[<span class="hljs-string">'en'</span>] + <span class="hljs-string">'&lt;/nav&gt;'</span>);
+					}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>set</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].set !== <span class="hljs-literal">undefined</span>) {
+					jQuery(<span class="hljs-string">'#itemCollection'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].set + <span class="hljs-string">'&lt;/span&gt;'</span>);
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>language</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].language !== <span class="hljs-literal">undefined</span>) {
+					jQuery(<span class="hljs-string">'#itemLanguage'</span>).append(<span class="hljs-string">'&lt;span class="flag '</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].language + <span class="hljs-string">'flag"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].expressions[<span class="hljs-number">0</span>].language + <span class="hljs-string">'&lt;/span&gt;'</span>);
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>end user role</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles.length !== <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+					{
+						<span class="hljs-keyword">if</span> (j == arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles.length - <span class="hljs-number">1</span>) {
+							jQuery(<span class="hljs-string">'#itemIntendedAudience'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+						} <span class="hljs-keyword">else</span> {
+							jQuery(<span class="hljs-string">'#itemIntendedAudience'</span>).append(<span class="hljs-string">'&lt;span class="forKomma"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.endUserRoles[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+						}
+					}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>learning resource type</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes.length !== <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+					{
+						<span class="hljs-keyword">if</span> (j == arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes.length - <span class="hljs-number">1</span>) {
+							jQuery(<span class="hljs-string">'#itemResourceType'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+						} <span class="hljs-keyword">else</span> {
+							jQuery(<span class="hljs-string">'#itemResourceType'</span>).append(<span class="hljs-string">'&lt;span class="forKomma"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.learningResourceTypes[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+						}
+					}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>contexts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts.length !== <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+					{
+						<span class="hljs-keyword">if</span> (j == arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts.length - <span class="hljs-number">1</span>) {
+							jQuery(<span class="hljs-string">'#itemEducationalContext'</span>).append(<span class="hljs-string">'&lt;span class="forKomma last"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+						} <span class="hljs-keyword">else</span> {
+							jQuery(<span class="hljs-string">'#itemEducationalContext'</span>).append(<span class="hljs-string">'&lt;span class="forKomma"&gt;'</span> + arrayWithJSONS[<span class="hljs-number">0</span>].tokenBlock.contexts[j] + <span class="hljs-string">'&lt;span&gt;'</span>);
+						}
+					}
+				}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>keywords</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (languageBlock.keywords.length !== <span class="hljs-literal">undefined</span>) {
+					<span class="hljs-comment">/* jQuery('#keywords').append('&lt;div&gt;&lt;ul class="itemKeywords"&gt;&lt;li&gt;&lt;span&gt;Keywords:&lt;/span&gt;&lt;nav id="itemKeywords" class="inline-nav clearfix"&gt; &lt;!--auto-generated--&gt;&lt;/nav&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;'); */</span>
+
+					<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> j = <span class="hljs-number">0</span>; j &lt; languageBlock.keywords.length; j++) <span class="hljs-comment">//*ARRAY of keywords in current version</span>
+					{
+						<span class="hljs-keyword">if</span> (j == languageBlock.keywords.length - <span class="hljs-number">1</span>) {
+							jQuery(<span class="hljs-string">'#itemKeywords'</span>).append(<span class="hljs-string">'&lt;a  href="listing.html?query='</span> + languageBlock.keywords[j] + <span class="hljs-string">'" class="forKomma link last"&gt;'</span> + languageBlock.keywords[j] + <span class="hljs-string">'&lt;/a&gt;'</span>);
+						} <span class="hljs-keyword">else</span> {
+							jQuery(<span class="hljs-string">'#itemKeywords'</span>).append(<span class="hljs-string">'&lt;a  href="listing.html?query='</span> + languageBlock.keywords[j] + <span class="hljs-string">'" class="forKomma link"&gt;'</span> + languageBlock.keywords[j] + <span class="hljs-string">'&lt;/a&gt;'</span>);
+						}
+					}
+				}
+			}
+			<span class="hljs-comment">/* end of -success- of getItemJSONP */</span>
+		}
+	})
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">imageClick</span><span class="hljs-params">(url)</span> {</span>
+	window.location = url;
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
